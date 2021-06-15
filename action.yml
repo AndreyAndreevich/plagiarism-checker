@@ -2,14 +2,28 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  user_token:  # user token from text.ru
-    description: 'User token'
+  user_key:
+    description: 'Text.ru user token'
     required: true
+  files:
+    description: 'Checking files'
+    required: true
+  public:
+    description: 'Is public links'
+    required: false
+    default: 'false'
+  min_uniq:
+    description: 'Set min uniq percent text'
+    required: false
+    default: '0'
 outputs:
-  uniq: # uniq text percent
-    description: 'Text uniq'
+  results:
+    description: 'Map of results'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.user_token }}
+  env:
+    USER_KEY: ${{ inputs.user_key }}
+    FILES: ${{ inputs.files }}
+    PUBLIC: ${{ inputs.public }}
+    MIN_UNIQ: ${{ inputs.min_uniq }}

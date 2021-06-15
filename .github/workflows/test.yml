@@ -1,0 +1,33 @@
+on: [push]
+
+jobs:
+  plagiarism_job:
+    runs-on: ubuntu-latest
+    name: Test plagiarism
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+#      - name: Get change files
+#        id: files
+#        uses: jitterbit/get-changed-files@v1
+#
+#      # example files to list
+#      - name: List files
+#        run: echo "files=$(echo "${{ steps.files.outputs.added_modified }}" | tr ' ' ',')" >> $GITHUB_ENV
+
+      - name: Test plagiarism
+#        uses: AndreyAndreevich/plagiarism-checker@v1 # Uses an action in the root directory
+        uses: ./
+        id: plagiarism
+        with:
+          user_key: ${{ secrets.USER_KEY }}
+          files: '__test__/test2.md'
+          public: 'true'
+          min_uniq: '10'
+
+      - name: Get results
+        if: always()
+        run: echo "${{ steps.plagiarism.outputs.results }}"
